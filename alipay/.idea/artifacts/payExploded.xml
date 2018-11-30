@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="payExploded">
+    <output-path>$PROJECT_DIR$/build/classes/pay</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="alipay.trade.page.pay-JAVA-UTF-8/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="alipay.trade.page.pay-JAVA-UTF-8" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zgzcwy.dao.OrderMapper">
+    <resultMap type="com.zgzcwy.entity.Order" id="orderAndUser">
+         <id column="oid" property="oid"/>
+         <result column="total" property="total"/>
+         <result column="ordertime" property="ordertime"/>
+         <result column="state" property="state"/>
+         <result column="addr" property="addr"/>
+         <result column="phone" property="phone"/>
+         <result column="name" property="name"/>
+         <association property="user" javaType="com.zgzcwy.entity.User">
+              <id property="uid" column="uid"/>
+               <result property="username" column="username"/>
+	           <result column="phone" property="phone"/>
+	           <result property="addr" column="addr"/>
+         </association>
+         <collection property="orderItems" ofType="com.zgzcwy.entity.OrderItem">
+	         <id column="itemid" property="itemid"/>
+	         <result column="count" property="count"/>
+	         <result column="subtotal" property="subtotal"/>
+	         <association property="product" javaType="com.zgzcwy.entity.Product">
+	           <id property="pid" column="pid"/>
+	           <result property="pname" column="pname"/>
+	           <result column="market_price" property="marketPrice"/>
+		        <result column="shop_price" property="shopPrice"/>
+		        <result column="image" property="image"/>
+		        <result column="pdesc" property="pdesc"/>
+		        <result column="is_hot" property="isHot"/>
+		        <result column="pdate" property="pdate"/>
+	         </association>
+         </collection>
+    </resultMap>
+    <resultMap type="com.zgzcwy.entity.OrderItem" id="orderItem">
+         <id column="itemid" property="itemid"/>
+         <result column="count" property="count"/>
+         <result column="subtotal" property="subtotal"/>
+         <association property="product" javaType="com.zgzcwy.entity.Product">
+            <id property="pid" column="pid"/>
+            <result property="pname" column="pname"/>
+            <result column="market_price" property="marketPrice"/>
+	        <result column="shop_price" property="shopPrice"/>
+	        <result column="image" property="image"/>
+	        <result column="pdesc" property="pdesc"/>
+	        <result column="is_hot" property="isHot"/>
+	        <result column="pdate" property="pdate"/>
+         </association>
+         <association property="order" javaType="com.zgzcwy.entity.Order">
+            <id property="oid" column="oid"/>
+         </association>
+    </resultMap>
+    <insert id="save" parameterType="com.zgzcwy.entity.Order">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="oid">
+		SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert into
+		orders(oid,total,ordertime,state,uid,addr,phone) 
+		values(#{oid},#{total},#{ordertime},#{state},#{user.uid},#{addr},#{phone})
+	</insert>
+	<insert id="saveOrderItem" parameterType="com.zgzcwy.entity.OrderItem">
+	    <!-- <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="itemid">
+	    SELECT LAST_INSERT_ID()
+		</selectKey> -->
+	    insert into
+		orderitem(itemid,count,subtotal,pid,oid) 
+		values(#{itemid},#{count},#{subtotal},#{product.pid},#{order.oid})
+	</insert>
+	<select id="findOrderByoid" resultMap="orderAndUser">
+	   select o.oid,o.total,o.ordertime,o.state,o.addr,o.phone,o.name,
+			     u.username,u.addr,u.phone,
+			     ot.count,ot.subtotal,
+		         p.image,p.pname,p.shop_price
+		         from orders o,user u,orderitem ot,product p
+		         where ot.oid=o.oid
+		         and
+		         o.uid=u.uid
+		         and
+		         ot.pid=p.pid
+		         and 
+		         o.oid=#{oids}
+	</select>
+	<select id="findOrderItemByOid" resultMap="orderItem">
+	    select o.itemid,o.count,o.subtotal,
+	    p.pname,p.market_price,
+	    p.shop_price,
+	    p.image
+	    from
+	    orderitem o,
+	    product p
+	    where
+	    o.pid=p.pid
+	    and
+	    o.oid=#{oids}
+	</select>
+	<update id="updateOrder" parameterType="com.zgzcwy.entity.Order">
+	    update orders
+	    set name=#{name},
+	    phone=#{phone},
+	    addr=#{addr}
+	</update>
+	
+	<select id="findOrderByUserId" resultMap="orderAndUser">
+	    select o.oid,o.total,o.ordertime,o.state,o.uid,o.addr,o.phone,o.name,
+	    ot.itemid,ot.count,ot.subtotal,
+	    p.pname,p.image,p.shop_price
+        from orders o,orderitem ot,product p
+        where ot.oid=o.oid
+        and
+        ot.pid=p.pid
+        and
+        o.uid=#{userId}
+	</select>
+</mapper>

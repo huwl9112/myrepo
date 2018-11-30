@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zgzcwy.dao.CategoryMapper">
+<resultMap type="com.zgzcwy.entity.Category" id="categoryMap">
+            <id column="cid" property="cid"/>
+         <result column="cname" property="cname"/>
+         <collection property="categorySeconds" ofType="com.zgzcwy.entity.CategorySecond">
+            <id column="csid" property="csid"/>
+         <result column="csname" property="csname"/>
+         </collection>
+</resultMap>
+<select id="findAllCategory" resultMap="categoryMap">
+     select c.cid,c.cname,
+     cs.csid,cs.csname
+     from category c,categorySecond cs
+     where 
+     cs.cid=c.cid
+</select>
+</mapper>

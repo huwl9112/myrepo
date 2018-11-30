@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zgzcwy.dao.UserMapper">
+<insert id="addUser" parameterType="com.zgzcwy.entity.User">
+     insert into 
+     user(uid,username,password,email,sex,phone,addr,status,code)
+     values(null,#{username},#{password},#{email},#{sex},#{phone},#{addr},#{status},#{code})
+</insert>
+<select id="findByUserName" resultType="com.zgzcwy.entity.User">
+     select uid,username,password,email,sex,phone,addr,status
+     from user
+     where username=#{username}
+</select>
+</mapper>

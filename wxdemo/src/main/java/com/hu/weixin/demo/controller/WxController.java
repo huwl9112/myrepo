@@ -98,7 +98,7 @@ public class WxController {
 
     }*/
 
-    /*public static void main(String[] args){//个人模板消息
+    public static void main(String[] args){//个人模板消息
         String token="16_ycQYiD-C2IgKtLPNNi8aREVnkKwgwHAPj2AJoVh6b5t1-DCYBRukehB6Suy18x9-wMs-uTbhuJgYm5F_GUYP3gBnkM-0ENLN_hGyTbPwBkeeY8gvJma_DMEG4rEZRHFMg3JZUHdeEL71mGMVRGEjACABQO";
         JSONObject param=new JSONObject();
         param.put("touser","of_8cw_xMOq_hu3XOfOs1wEv05cU");
@@ -114,11 +114,11 @@ public class WxController {
         JSONObject jsonObject = CommonUtil.httpsRequest(url+token, "POST", JSONObject.toJSONString(param));
         System.out.print(jsonObject.toJSONString());
 
-    }*/
+    }
 
 
 
-    public static void main(String[] args){//客服消息
+    /*public static void main(String[] args){//客服消息
         String token="16_ycQYiD-C2IgKtLPNNi8aREVnkKwgwHAPj2AJoVh6b5t1-DCYBRukehB6Suy18x9-wMs-uTbhuJgYm5F_GUYP3gBnkM-0ENLN_hGyTbPwBkeeY8gvJma_DMEG4rEZRHFMg3JZUHdeEL71mGMVRGEjACABQO";
         JSONObject param=new JSONObject();
         param.put("touser","of_8cw3JDkPhOqFrDrSiHKfDqtEI");
@@ -131,5 +131,5 @@ public class WxController {
         JSONObject jsonObject = CommonUtil.httpsRequest(url+token, "POST", JSONObject.toJSONString(param));
         System.out.print(jsonObject.toJSONString());
 
-    }
+    }*/
 }

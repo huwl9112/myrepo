@@ -6,5 +6,125 @@
 </head>
 <body>
 ${name}
+<button id="btn">11111</button>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script type="text/javascript">
+    $(function(){
+        let visiteUrl = location.href.split('#')[0]; //获取锚点之前的链接
+        $.get('getSignature',{visiteUrl:visiteUrl},function (res) {
+            wxInit(res);
+        });
+    });
+    $('#btn').click(function () {
+        pay();
+    });
+
+    function map(){//地图
+        wx.getLocation({
+            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+            success: function (res) {
+                console.log(res);
+
+                wx.openLocation({
+                    latitude: res.latitude, // 纬度，浮点数，范围为90 ~ -90
+                    longitude: res.longitude, // 经度，浮点数，范围为180 ~ -180。
+                    name: '南京德众堂大药房', // 位置名
+                    address: '虎踞路汉中门7号', // 地址详情说明
+                    scale: 16, // 地图缩放级别,整形值,范围从1~28。默认为最大
+                    infoUrl: 'http://www.baidu.coom' // 在查看位置界面底部显示的超链接,可点击跳转
+                });
+
+
+            }
+        });
+    }
+
+    function pay(){//支付
+        wx.chooseWXPay({
+            timestamp: 0, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+            nonceStr: '', // 支付签名随机串，不长于 32 位
+            package: '', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+            signType: '', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+            paySign: '', // 支付签名
+            success: function (res) {
+// 支付成功后的回调函数
+            }
+        });
+    }
+
+    function openCamera(){//拍照
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original', 'compressed'], // 指定是原图还是压缩图，默认都有
+            sourceType: ['album', 'camera'], // 指定来源是相册还是相机，默认都有
+            success: function (res) {
+                var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+                wx.uploadImage({
+                    localId: localIds.toString(), // 需要上传的图片的ID，由chooseImage接口获得
+                    isShowProgressTips: 1, // 进度提示
+                    success: function (res) {
+                        var mediaId = res.serverId; // 返回图片的服务器端ID，即mediaId
+                        alert(mediaId);
+                        //将获取到的 mediaId 传入后台 方法savePicture
+                        /* $.post(path+"/getImage/savePicture",{"mediaId":mediaId,"tmp":"填写证件的正反面参数"},function(res){
+                             //填写你自己的业务逻辑
+                         });*/
+                    },
+                    fail: function (res) {
+                        alertModal('图片上传失败，请重试');
+                    }
+                });
+            }
+        });
+    }
+
+    function share(){//分享
+        //微信分享菜单测试
+        wx.onMenuShareAppMessage({
+            title: title, // 分享标题
+            desc: desc, // 分享描述
+            link: links, // 分享链接
+            imgUrl: imgUrl, // 分享图标
+            success: function() {
+                // alert("成功分享给朋友")
+//              Toast({
+//                message: "成功分享给朋友"
+//              });
+            },
+            cancel: function() {
+                // alert("分享失败,您取消了分享!")
+//              Toast({
+//                message: "分享失败,您取消了分享!"
+//              });
+            }
+        });
+    }
+
+
+    function wxInit(res) {
+        let url = location.href.split('#')[0] //获取锚点之前的链接
+        let links = url;
+        let title = '-嘌呤查';
+        let desc = '了解更多知识，请关注“嘌呤查”公众号';
+        let imgUrl = "http://v21d802929.51mypc.cn/dtp/wxcus/images/box.png";
+        wx.config({
+            debug: true,
+            appId: res.appId,
+            timestamp: res.timestamp,
+            nonceStr: res.noncestr,
+            signature: res.signature,
+            jsApiList: ['chooseImage','onMenuShareAppMessage','uploadImage','translateVoice','openLocation','getLocation','chooseWXPay']
+        });
+        wx.ready(function() {//不是由点击事件触发，即初始化事件写在此处
+            wx.hideOptionMenu();//隐藏右边的一些菜单
+
+        });
+
+        wx.error(function(err) {
+            console.log(err)
+        });
+    }
+
+</script>
 </body>
 </html>

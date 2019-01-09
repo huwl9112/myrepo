@@ -22,7 +22,7 @@ import java.net.URL;
  * @date：2018年1月23日 下午3:22:19
  */
 @Slf4j
-public class CommonUtil{
+public class HttpsUtil {
 /**
  * 发送https请求
  *
